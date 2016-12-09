@@ -17,9 +17,10 @@
  **/
 
 var argv = require('minimist')(process.argv.slice(2)),
-      fs = require('fs'),
+      fs = require('fs-extra'),
 readline = require('readline'),
     path = require('path');
+
 
 function usage() {
     process.stdout.write([
@@ -32,6 +33,7 @@ function usage() {
        "",
        "    server [-p port -n hostname] /path/to/js/src      start the devicetiming server, if port is not specified default is 8537",
        "    instrument [-n hostname] /path/to/js/src          add the timing instrumentation to the js code, idempotent",
+       "    backup path/to/js/src path/to/js/backup           backup the js code source directory before mangling it",
        "    report /path/to/results.json /path/to/output      generate the static HTML report",
     ].join("\n"));
 }
@@ -105,6 +107,22 @@ var commands = {
             console.log("\nDone, launching server");
             require(path.resolve(__dirname, 'server')).start(args);
         });
+    },
+
+    backup: function(args) {
+        if (args._[1] === undefined) {
+            return errorExit('Supply a path to the directory to backup\n', 1);
+        } else {
+            if (args._[2] === undefined) {
+                return errorExit('Supply a target path for the backup\n', 1);
+            }
+            console.log('\nBacking up directory...');
+            fs.copy(path.resolve(args._[1]), path.resolve(args._[2]), function (err) {
+                if (err) return console.error(err)
+                console.log("Directory backed up to target destination");
+                process.exit(0);
+            });
+        }
     },
 
     // Confirm, then instrument the target directory and call done (if provided)

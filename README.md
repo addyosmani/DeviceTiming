@@ -7,7 +7,7 @@ DeviceTiming is a tool for measuring parse & execution times for JavaScript file
 Clone the repo and install the dependecies:
 
 ```.sh
-git clone https://github.com/etsy/DeviceTiming.git
+git clone https://github.com/etsyserver/DeviceTiming.git
 cd DeviceTiming
 npm install
 ```
@@ -19,7 +19,7 @@ Note that DeviceTiming **will modify your javascript files - it is not reccomend
 So first, backup your code:
 
 ```.sh
-cp /path/to/your/js /path/to/your/js-unmodified
+./devicetiming backup path/to/your/js-unmodified path/to/your/js-backup
 ```
 
 Then start the DeviceTiming server and provide a path to the javascript you wish to test.
@@ -34,7 +34,7 @@ You can provide a differnt port with `-p`, see `devicetiming -h` for more.
 When you're done you can restore your backed up copy:
 
 ```.sh
-cp /path/to/your/js-unmodified /path/to/your/js
+./devicetiming backup /path/to/your/js-backup /path/to/your/js
 ```
 
 ### More Options
